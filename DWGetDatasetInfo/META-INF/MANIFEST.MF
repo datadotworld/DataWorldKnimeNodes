@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GetDatasetInfo-Node extension for KNIME Workbench
+Bundle-SymbolicName: org.knime.data.world.restful; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: getdatasetinfo.jar
+Bundle-Activator: org.knime.data.world.restful.GetDatasetInfoNodePlugin
+Bundle-Vendor: Appliomics, LLC
+Require-Bundle: org.eclipse.core.runtime,
+ org.knime.workbench.core,
+ org.knime.workbench.repository,
+ org.knime.base,
+ org.scala-lang.scala-library,
+ org.apache.httpcomponents.httpclient;bundle-version="4.3.6",
+ org.apache.httpcomponents.httpcore;bundle-version="4.3.3"
+Bundle-ActivationPolicy: lazy
+Export-Package: org.knime.data.world.restful
+
