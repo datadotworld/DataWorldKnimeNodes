@@ -2,8 +2,8 @@
 data.world KNIME nodes providing access to the data.world platform and data hosted there from the KNIME data mining and visualization software.
 
 ### Dependencies
-* Included with this package is the data.world JDBC driver jar which can be obtained via [http://search.maven.org/#search%7Cga%7C1%7Cdw-jdbc](http://search.maven.org/) (grab the shaded.jar link).  Initially this project was developed against v0.4.1 of that driver, accessible via this direct [http://search.maven.org/remotecontent?filepath=world/data/dw-jdbc/0.4.1/dw-jdbc-0.4.1-shaded.jar](link).
-* Included with this package are the jars from the [https://hc.apache.org/](Apache HttpComponents) project's client components. Initially this project was developed against the v4.5.3 release of the client components.
+* Included with this package is the data.world JDBC driver jar which can be obtained via [http://search.maven.org/](http://search.maven.org/#search%7Cga%7C1%7Cdw-jdbc) (grab the shaded.jar link).  Initially this project was developed against v0.4.1 of that driver, accessible via this direct [link](http://search.maven.org/remotecontent?filepath=world/data/dw-jdbc/0.4.1/dw-jdbc-0.4.1-shaded.jar).
+* Included with this package are the jars from the [Apache HttpComponents](https://hc.apache.org/) project's client components. Initially this project was developed against the v4.5.3 release of the client components.
 
 
 ## Authors
