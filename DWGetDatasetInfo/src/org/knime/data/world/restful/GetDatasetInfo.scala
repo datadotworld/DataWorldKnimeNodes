@@ -14,18 +14,22 @@ import javax.json.Json
 case class SourceInfo(url : String,
                       syncStatus : String,
                       lastSyncStart : String,
-                      lastSyncSuccess : String)
+                      lastSyncSuccess : String,
+                      lastSyncFailure : String)
 case class FileInfo(name : String,
                     sizeInBytes : Int,
                     source : SourceInfo,
                     created : String,
                     updated : String,
+                    description : String,
                     labels : Array[String])
 case class DatasetInfo(owner : String,
                        id : String,
                        title : String,
                        description : String,
+                       summary : String,
                        tags : Array[String],
+                       license : String,
                        visibility : String,
                        files : Array[FileInfo],
                        status : String,

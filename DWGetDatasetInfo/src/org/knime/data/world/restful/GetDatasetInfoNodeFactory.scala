@@ -39,4 +39,3 @@ class GetDatasetInfoNodeFactory extends NodeFactory[GetDatasetInfoNodeModel] {
   override def createNodeDialogPane() : NodeDialogPane = new GetDatasetInfoNodeDialog
 
 }
-

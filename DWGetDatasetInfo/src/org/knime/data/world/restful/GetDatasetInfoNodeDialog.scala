@@ -21,8 +21,6 @@ class GetDatasetInfoNodeDialog extends DefaultNodeSettingsPane {
   
   /**
    * New pane for configuring GetDatasetInfo node dialog.
-   * This is just a suggestion to demonstrate possible default dialog
-   * components.
    */
   // TODO: Also support supplying a url instead of these fragments of user/dataset
   addDialogComponent(
@@ -42,4 +40,3 @@ class GetDatasetInfoNodeDialog extends DefaultNodeSettingsPane {
       true,
       36));
 }
-

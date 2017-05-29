@@ -19,8 +19,6 @@ import org.knime.core.node.CanceledExecutionException
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded
 import org.knime.core.node.defaultnodesettings.SettingsModelString
 
-import scala.math.BigInt
-
 import org.knime.core.node.ExecutionContext
 import org.knime.core.node.ExecutionMonitor
 import org.knime.core.node.InvalidSettingsException
@@ -79,7 +77,9 @@ class GetDatasetInfoNodeModel extends NodeModel(0, 2) {
         new StringCell(datasetInfo.id),
         new StringCell(datasetInfo.title),
         new StringCell(datasetInfo.description),
+        if(datasetInfo.summary != null) new StringCell(datasetInfo.summary) else DataType.getMissingCell,
         if(datasetInfo.tags != null) new StringCell(datasetInfo.tags mkString(", ")) else DataType.getMissingCell,
+        if(datasetInfo.license != null) new StringCell(datasetInfo.license) else DataType.getMissingCell,
         new StringCell(datasetInfo.visibility),
         new IntCell(numFilesInDataset),
         new StringCell(datasetInfo.status),
@@ -105,9 +105,11 @@ class GetDatasetInfoNodeModel extends NodeModel(0, 2) {
         new StringCell(fileInfo.source.url),
         new StringCell(fileInfo.source.syncStatus),
         new StringCell(fileInfo.source.lastSyncStart),
-        new StringCell(fileInfo.source.lastSyncSuccess), 
+        new StringCell(fileInfo.source.lastSyncSuccess),
+        if(fileInfo.source.lastSyncFailure != null) new StringCell(fileInfo.source.lastSyncFailure) else DataType.getMissingCell,
         new StringCell(fileInfo.created),
         new StringCell(fileInfo.updated),
+        if(fileInfo.description != null) new StringCell(fileInfo.description) else DataType.getMissingCell,
         if(fileInfo.labels != null) new StringCell(fileInfo.labels mkString(", ")) else DataType.getMissingCell)
       val row : DataRow = new DefaultRow(key, cells : _*)
       filesContainer addRowToTable(row)
@@ -143,7 +145,9 @@ class GetDatasetInfoNodeModel extends NodeModel(0, 2) {
       new DataColumnSpecCreator("Id", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Title", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Description", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("Summary", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Tags", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("License", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Visibility", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Files Count", IntCell.TYPE).createSpec,
       new DataColumnSpecCreator("Status", StringCell.TYPE).createSpec,
@@ -153,12 +157,14 @@ class GetDatasetInfoNodeModel extends NodeModel(0, 2) {
     val filesColSpecs : Array[DataColumnSpec] = Array[DataColumnSpec](
       new DataColumnSpecCreator("Name", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Size in Bytes", IntCell.TYPE).createSpec,
-      new DataColumnSpecCreator("Url", StringCell.TYPE).createSpec,
-      new DataColumnSpecCreator("Sync Status", StringCell.TYPE).createSpec,
-      new DataColumnSpecCreator("Last Sync Start", StringCell.TYPE).createSpec,
-      new DataColumnSpecCreator("Last Sync Success", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("Source Url", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("Source Sync Status", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("Source Last Sync Start", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("Source Last Sync Success", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("Source Last Sync Failure", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Created", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Updated", StringCell.TYPE).createSpec,
+      new DataColumnSpecCreator("Description", StringCell.TYPE).createSpec,
       new DataColumnSpecCreator("Labels", StringCell.TYPE).createSpec)
     val outputFilesSpec : DataTableSpec = new DataTableSpec(filesColSpecs : _*)
 
