@@ -96,21 +96,23 @@ class GetDatasetInfoNodeModel extends NodeModel(0, 2) {
 
     // Populate second output port with data
     val filesContainer : BufferedDataContainer = exec createDataContainer(outputFilesSpec)
-    for (i <- 0 to (numFilesInDataset - 1)) {
+    for (i <- 0 until numFilesInDataset) {
       val fileInfo : FileInfo = datasetInfo.files(i)
+      GetDatasetInfoNodeModel.logger debug("Received file info: " + fileInfo.toString)
+
       val key : RowKey = new RowKey("Row " + i)
       val cells : Array[DataCell] = Array[DataCell](
         new StringCell(fileInfo.name),
         new IntCell(fileInfo.sizeInBytes),
-        new StringCell(fileInfo.source.url),
-        new StringCell(fileInfo.source.syncStatus),
-        new StringCell(fileInfo.source.lastSyncStart),
-        new StringCell(fileInfo.source.lastSyncSuccess),
-        if(fileInfo.source.lastSyncFailure != null) new StringCell(fileInfo.source.lastSyncFailure) else DataType.getMissingCell,
+        if (fileInfo.source != null && fileInfo.source.url != null) new StringCell(fileInfo.source.url) else DataType.getMissingCell,
+        if (fileInfo.source != null && fileInfo.source.syncStatus != null) new StringCell(fileInfo.source.syncStatus) else DataType.getMissingCell,
+        if (fileInfo.source != null && fileInfo.source.lastSyncStart != null) new StringCell(fileInfo.source.lastSyncStart) else DataType.getMissingCell,
+        if (fileInfo.source != null && fileInfo.source.lastSyncSuccess != null) new StringCell(fileInfo.source.lastSyncSuccess) else DataType.getMissingCell,
+        if (fileInfo.source != null && fileInfo.source.lastSyncFailure != null) new StringCell(fileInfo.source.lastSyncFailure) else DataType.getMissingCell,
         new StringCell(fileInfo.created),
         new StringCell(fileInfo.updated),
-        if(fileInfo.description != null) new StringCell(fileInfo.description) else DataType.getMissingCell,
-        if(fileInfo.labels != null) new StringCell(fileInfo.labels mkString(", ")) else DataType.getMissingCell)
+        if (fileInfo.description != null) new StringCell(fileInfo.description) else DataType.getMissingCell,
+        if (fileInfo.labels != null) new StringCell(fileInfo.labels mkString(", ")) else DataType.getMissingCell)
       val row : DataRow = new DefaultRow(key, cells : _*)
       filesContainer addRowToTable(row)
       

@@ -30,7 +30,7 @@ class GetDatasetInfoNodeDialog extends DefaultNodeSettingsPane {
         GetDatasetInfoNodeModel.DEFAULT_USER),
       "data.world Username:",
       true,
-      36));
+      36))
   addDialogComponent(
     new DialogComponentString(
       new SettingsModelString(
@@ -38,5 +38,5 @@ class GetDatasetInfoNodeDialog extends DefaultNodeSettingsPane {
         GetDatasetInfoNodeModel.DEFAULT_DATASETNAME),
       "Dataset Name:",
       true,
-      36));
+      36))
 }
