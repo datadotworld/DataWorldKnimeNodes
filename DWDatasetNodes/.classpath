@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="lib/jna-4.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jna-platform-4.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/dw-jdbc-0.4.1-shaded.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -15,5 +15,15 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.httpcomponents.httpcore;bundle-version="4.3.3",
  com.google.gson;bundle-version="2.3.1"
 Bundle-ActivationPolicy: lazy
-Export-Package: org.knime.data.world.restful
+Export-Package: org.knime.data.world.restful;version="0.8.0";
+  uses:="org.knime.core.node.port.database,
+   scala,
+   org.knime.core.node.port.database.reader,
+   org.osgi.framework,
+   org.eclipse.core.runtime,
+   org.apache.http.client.utils,
+   org.knime.core.node.defaultnodesettings,
+   org.knime.core.data,
+   org.knime.core.node",
+ world.data.jdbc;version="0.4.1"
 
