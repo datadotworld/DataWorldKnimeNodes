@@ -25,6 +25,6 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Files to be Uploaded Port">Filenames to be uploaded to a data.world Dataset</inPort>
+        <inPort index="0" name="Files to be Uploaded">Filenames to be uploaded to a data.world Dataset</inPort>
     </ports>    
 </knimeNode>

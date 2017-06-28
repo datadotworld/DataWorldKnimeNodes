@@ -34,7 +34,7 @@ class DatasetFileReaderNodeDialog extends DefaultNodeSettingsPane {
         DatasetFileReaderNodeModel.DEFAULT_DATASETFILEURL),
       "Dataset File URL:",
       true,
-      72))
+      60))
   /* TODO: Populate this with options after restful call to look them up?
   addDialogComponent(
     new DialogComponentStringSelection(

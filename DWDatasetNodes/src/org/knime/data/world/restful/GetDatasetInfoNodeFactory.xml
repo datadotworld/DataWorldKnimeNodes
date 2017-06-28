@@ -25,7 +25,7 @@
     </fullDescription>
     
     <ports>
-        <outPort index="0" name="Dataset Info Port">Info on data.world Dataset</outPort>
-        <outPort index="1" name="Files Info Port">Info on files belonging to data.world Dataset</outPort>
+        <outPort index="0" name="Dataset Info">Info on data.world Dataset</outPort>
+        <outPort index="1" name="Files Info">Info on files belonging to data.world Dataset</outPort>
     </ports>    
 </knimeNode>

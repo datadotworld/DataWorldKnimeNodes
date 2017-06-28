@@ -139,8 +139,9 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
       if (uri.getScheme != "https") throw new InvalidSettingsException("URL is expected to use https")
       account = path(1)
       dataset = path(2)
-      filename = uriQuery.split('=')(1).split('.')(0) // TODO: Make much more robust
+      filename = uriQuery.split('=')(1)
     }
+    if (filename.split('.').length > 1) filename = filename.split('.')(0)  // TODO: Make much more robust
     DatasetFileReaderNodeModel.logger debug("Configure using account: " + account)
     DatasetFileReaderNodeModel.logger debug("Configure using dataset: " + dataset)
     DatasetFileReaderNodeModel.logger debug("Configure using filename: " + filename)
