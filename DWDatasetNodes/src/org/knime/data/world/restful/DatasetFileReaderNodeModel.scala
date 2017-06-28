@@ -139,9 +139,14 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
       if (uri.getScheme != "https") throw new InvalidSettingsException("URL is expected to use https")
       account = path(1)
       dataset = path(2)
-      filename = uriQuery.split('=')(1)
+      filename = uriQuery.split('=')(1) // TODO: Verify that filename is key and no other fields
     }
-    if (filename.split('.').length > 1) filename = filename.split('.')(0)  // TODO: Make much more robust
+    // Currently, data.world appears to transform filenames containing
+    // multiple dots in their names to use underscores (for example,
+    // "some.stuff.in.here.csv" is exposed via JDBC as a table instead
+    // named "some_stuff_in_here".  We will attempt to follow this
+    // potentially undocumented pattern which could of course change.
+    if (filename.split('.').length > 1) filename = filename.split('.').dropRight(1).mkString("_")
     DatasetFileReaderNodeModel.logger debug("Configure using account: " + account)
     DatasetFileReaderNodeModel.logger debug("Configure using dataset: " + dataset)
     DatasetFileReaderNodeModel.logger debug("Configure using filename: " + filename)
