@@ -29,7 +29,7 @@ class AddDatasetFileNodeDialog extends DefaultNodeSettingsPane {
         AddDatasetFileNodeModel.DEFAULT_DATASETNAME),
       "Dataset Name:",
       true,
-      30))
+      21))
   addDialogComponent(
     new DialogComponentColumnNameSelection(
       new SettingsModelString(
