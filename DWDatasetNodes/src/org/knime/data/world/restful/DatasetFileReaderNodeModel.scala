@@ -13,14 +13,15 @@ import org.knime.core.data.`def`.DefaultRow
 import org.knime.core.data.`def`.DoubleCell
 import org.knime.core.data.`def`.IntCell
 import org.knime.core.data.`def`.StringCell
+
 import org.knime.core.node.BufferedDataContainer
 import org.knime.core.node.BufferedDataTable
 import org.knime.core.node.CanceledExecutionException
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded
 import org.knime.core.node.defaultnodesettings.SettingsModelString
 import org.knime.core.node.port.database.reader.DBReader
+import org.knime.core.node.port.database.DatabaseConnectionSettings
 import org.knime.core.node.port.database.DatabaseQueryConnectionSettings
-
 import org.knime.core.node.ExecutionContext
 import org.knime.core.node.ExecutionMonitor
 import org.knime.core.node.InvalidSettingsException
@@ -30,6 +31,8 @@ import org.knime.core.node.NodeSettingsRO
 import org.knime.core.node.NodeSettingsWO
 
 import org.knime.core.util.KnimeEncryption
+
+import org.knime.data.world.prefs.DWPluginActivator
 
 
 /**
@@ -102,16 +105,22 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    * {@inheritDoc}
    */
   protected override def configure(inSpecs : Array[DataTableSpec]) : Array[DataTableSpec] = {
+    val username : String = DWPluginActivator.getUsername
+    val password : String = DWPluginActivator.getPassword
+    val dataset : String = m_datasetName.getStringValue
+    val filename : String = "iris"  // TODO: Take from node dialog
+    
     m_settings setDriver("world.data.jdbc.Driver")
-    m_settings setJDBCUrl("jdbc:data:world:sql:test-knime:dummy-data-01")
-    m_settings setUserName("test-knime")
-    m_settings setPassword(KnimeEncryption.encrypt("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcm9kLXVzZXItY2xpZW50OnRlc3Qta25pbWUiLCJpc3MiOiJhZ2VudDp0ZXN0LWtuaW1lOjpjMTJmNGQ3Mi05NWVkLTQ4YzYtOWY4ZS1lOGZjNzBlNzM0NGMiLCJpYXQiOjE0OTU5ODU4OTYsInJvbGUiOlsidXNlcl9hcGlfd3JpdGUiLCJ1c2VyX2FwaV9yZWFkIl0sImdlbmVyYWwtcHVycG9zZSI6dHJ1ZX0.hj99p_bq3YjFcI-wqluqLFK0p1Mq1U2uaC_mJzU3ExEELYhxpPRz9881EXV-BvprepMjwgQQuRezi3CoQL17ZA".toArray))
+    m_settings setJDBCUrl("jdbc:data:world:sql:" + username + ":" + dataset)
+    m_settings setUserName(username)  // Currently unused/redundant, will keep for now.
+    m_settings setPassword(KnimeEncryption.encrypt(password.toArray))
     m_settings setTimezone("none")
     m_settings setAllowSpacesInColumnNames(true)
 
-    val query : String = "SELECT * FROM iris"
+    val query : String = "SELECT * FROM " + filename
     m_settings setQuery(query)
     
+    DatasetFileReaderNodeModel.logger debug("Configure about to determine output data table spec from reader")
     m_outSpec = getReader().getDataTableSpec(getCredentialsProvider)
 
     return Array[DataTableSpec](m_outSpec)
@@ -123,6 +132,11 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
   protected override def saveSettingsTo(settings : NodeSettingsWO) : Unit = {
     m_username saveSettingsTo(settings)
     m_datasetName saveSettingsTo(settings)
+    DatasetFileReaderNodeModel.logger debug("saveSettingsTo about to call saveConnection")
+    
+    // TODO: Possibly replace with something that helps the related entries re: validated settings below
+    //settings.addString(DatasetFileReaderNodeModel.CFGKEY_SQLSTATEMENT, m_settings.getQuery)
+    
     m_settings saveConnection(settings)
   }
 
@@ -132,9 +146,11 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
   protected override def loadValidatedSettingsFrom(settings : NodeSettingsRO) : Unit = {
     m_username loadSettingsFrom(settings)
     m_datasetName loadSettingsFrom(settings)
-    val settingsChanged = m_settings loadValidatedConnection(settings, getCredentialsProvider)
-    
-    if (settingsChanged) m_outSpec = null
+
+    // TODO: Replace with something that works
+    //DatasetFileReaderNodeModel.logger debug("loadValidatedSettingsFrom about to call loadValidatedConnection")
+    //val settingsChanged = m_settings loadValidatedConnection(settings, getCredentialsProvider)
+    //if (settingsChanged) m_outSpec = null
   }
 
   /**
@@ -144,8 +160,10 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
     m_username validateSettings(settings)
     m_datasetName validateSettings(settings)
     
-    val connSettings = new DatabaseQueryConnectionSettings
-    connSettings.validateConnection(settings, getCredentialsProvider)
+    // TODO: Replace with something that works
+    //DatasetFileReaderNodeModel.logger debug("validateSettings about to call validateConnection")
+    //val connSettings = new DatabaseQueryConnectionSettings
+    //connSettings.validateConnection(settings, getCredentialsProvider)
   }
     
   /**
@@ -186,4 +204,6 @@ object DatasetFileReaderNodeModel {
 
   val CFGKEY_DATASETFILENAME : String = "Dataset File"
   val DEFAULT_DATASETFILENAME : String = "filename-01"
+  
+  val CFGKEY_SQLSTATEMENT : String = DatabaseConnectionSettings.CFG_STATEMENT
 }

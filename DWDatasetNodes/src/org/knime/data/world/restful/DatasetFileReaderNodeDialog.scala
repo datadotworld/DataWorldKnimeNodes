@@ -61,5 +61,8 @@ class DatasetFileReaderNodeDialog extends DefaultNodeSettingsPane {
       0,
       true)
   */
+  
+  // TODO: Replace with something appropriate per validate settings methods in NodeModel
+  //val sqlStatementSetting = new SettingsModelString(DatasetFileReaderNodeModel.CFGKEY_SQLSTATEMENT, "")
 
 }
