@@ -25,14 +25,6 @@ class AddDatasetFileNodeDialog extends DefaultNodeSettingsPane {
   addDialogComponent(
     new DialogComponentString(
       new SettingsModelString(
-        AddDatasetFileNodeModel.CFGKEY_USER,
-        AddDatasetFileNodeModel.DEFAULT_USER),
-      "data.world Username:",
-      true,
-      36))
-  addDialogComponent(
-    new DialogComponentString(
-      new SettingsModelString(
         AddDatasetFileNodeModel.CFGKEY_DATASETNAME,
         AddDatasetFileNodeModel.DEFAULT_DATASETNAME),
       "Dataset Name:",

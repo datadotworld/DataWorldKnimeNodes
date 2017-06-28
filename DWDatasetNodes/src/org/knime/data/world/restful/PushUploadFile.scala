@@ -9,6 +9,8 @@ import org.apache.http.entity.FileEntity
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
 
+import org.knime.data.world.prefs.DWPluginActivator
+
 import com.google.gson.Gson
 
 import java.io.File
@@ -21,18 +23,18 @@ case class PushResponse(message : String)
 class PushUploadFile {
   val uriPrebuild = new URIBuilder() setScheme("https") setHost("api.data.world")
 
-  // TODO: Pull from preferences
-  val apiKey : String = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcm9kLXVzZXItY2xpZW50OnRlc3Qta25pbWUiLCJpc3MiOiJhZ2VudDp0ZXN0LWtuaW1lOjpjMTJmNGQ3Mi05NWVkLTQ4YzYtOWY4ZS1lOGZjNzBlNzM0NGMiLCJpYXQiOjE0OTU5ODU4OTYsInJvbGUiOlsidXNlcl9hcGlfd3JpdGUiLCJ1c2VyX2FwaV9yZWFkIl0sImdlbmVyYWwtcHVycG9zZSI6dHJ1ZX0.hj99p_bq3YjFcI-wqluqLFK0p1Mq1U2uaC_mJzU3ExEELYhxpPRz9881EXV-BvprepMjwgQQuRezi3CoQL17ZA"
+  val username : String = DWPluginActivator.getUsername
+  val apiKey : String = DWPluginActivator.getPassword
 
-  def pushSingleFile(username : String, dataset : String, filename : String) : (Int, PushResponse) = {
+  def pushSingleFile(dataset : String, filename : String) : (Int, PushResponse) = {
     val file = new File(filename)
 
     val uri = uriPrebuild setPath("/v0/uploads/" + username + "/" + dataset + "/files/" + file.getName) build
     
-    return putRestFileUpload(uri, apiKey, file)
+    return putRestFileUpload(uri, file)
   }
 
-  def putRestFileUpload(url : URI, apiKey : String, file : File) : (Int, PushResponse) = {
+  def putRestFileUpload(url : URI, file : File) : (Int, PushResponse) = {
     val fileEntity = new FileEntity(file)
     
     // TODO: Update this if/when data.world changes this to use POST instead

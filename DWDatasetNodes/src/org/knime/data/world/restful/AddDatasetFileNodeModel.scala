@@ -39,10 +39,6 @@ import scala.collection.JavaConversions.iterableAsScalaIterable
 class AddDatasetFileNodeModel extends NodeModel(1, 0) {
   // NodeModel(1, 0) indicates one incoming port and zero outgoing ports
   
-  private val m_username : SettingsModelString =
-    new SettingsModelString(
-      AddDatasetFileNodeModel.CFGKEY_USER,
-      AddDatasetFileNodeModel.DEFAULT_USER)
   private val m_datasetName : SettingsModelString =
     new SettingsModelString(
       AddDatasetFileNodeModel.CFGKEY_DATASETNAME,
@@ -70,7 +66,7 @@ class AddDatasetFileNodeModel extends NodeModel(1, 0) {
       val currentFilename = row.getCell(colPosition).asInstanceOf[StringValue] getStringValue
 
       AddDatasetFileNodeModel.logger info("Preparing to push " + currentFilename + " to data.world")
-      val (statusCode, response) = puf.pushSingleFile(m_username getStringValue, m_datasetName getStringValue, currentFilename)
+      val (statusCode, response) = puf.pushSingleFile(m_datasetName getStringValue, currentFilename)
       AddDatasetFileNodeModel.logger debug("File pushed to data.world; response msg: " + response.message)
 
       if (statusCode != 200)
@@ -119,7 +115,6 @@ class AddDatasetFileNodeModel extends NodeModel(1, 0) {
    * {@inheritDoc}
    */
   protected override def saveSettingsTo(settings : NodeSettingsWO) : Unit = {
-    m_username saveSettingsTo(settings)
     m_datasetName saveSettingsTo(settings)
     m_colFilename saveSettingsTo(settings)
   }
@@ -128,7 +123,6 @@ class AddDatasetFileNodeModel extends NodeModel(1, 0) {
    * {@inheritDoc}
    */
   protected override def loadValidatedSettingsFrom(settings : NodeSettingsRO) : Unit = {
-    m_username loadSettingsFrom(settings)
     m_datasetName loadSettingsFrom(settings)
     m_colFilename loadSettingsFrom(settings)
   }
@@ -137,7 +131,6 @@ class AddDatasetFileNodeModel extends NodeModel(1, 0) {
    * {@inheritDoc}
    */
   protected override def validateSettings(settings : NodeSettingsRO) : Unit = {
-    m_username validateSettings(settings)
     m_datasetName validateSettings(settings)
     m_colFilename validateSettings(settings)
   }
@@ -172,9 +165,6 @@ object AddDatasetFileNodeModel {
   // the logger instance
   private val logger : NodeLogger = NodeLogger.getLogger(classOf[AddDatasetFileNodeModel])
 
-  val CFGKEY_USER : String = "data.world Username"
-  val DEFAULT_USER : String = "knime"
-  
   val CFGKEY_DATASETNAME : String = "Dataset Name"
   val DEFAULT_DATASETNAME : String = "dataset-01"
 

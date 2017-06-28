@@ -30,6 +30,7 @@ class DWPreferencePage extends FieldEditorPreferencePage(FieldEditorPreferencePa
     val result = super.performOk
     
     // TODO: Verify that username and api key are not empty
+    // TODO: Suggest that username be all lower case if it isn't already
     
     return result
   }
