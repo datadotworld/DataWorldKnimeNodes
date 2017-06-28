@@ -40,4 +40,3 @@ class AddDatasetFileNodeDialog extends DefaultNodeSettingsPane {
       true,
       classOf[StringValue]))
 }
-

@@ -10,7 +10,7 @@ class DWPreferencePage extends FieldEditorPreferencePage(FieldEditorPreferencePa
   setPreferenceStore(DWPluginActivator getDefault() getPreferenceStore)
   setDescription("Preferences for data.world Integration.")
   var m_username = DWPluginActivator.getUsername
-  var m_apiKey = DWPluginActivator.getPassword
+  var m_apiKey = DWPluginActivator.getAPIKey
   
   override def init(workbench : IWorkbench) : Unit = {
     getPreferenceStore() setDefault(DWPreferencePage.P_DW_USERNAME, "your_data_world_username")

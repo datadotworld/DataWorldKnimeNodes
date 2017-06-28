@@ -24,7 +24,7 @@ class PushUploadFile {
   val uriPrebuild = new URIBuilder() setScheme("https") setHost("api.data.world")
 
   val username : String = DWPluginActivator.getUsername
-  val apiKey : String = DWPluginActivator.getPassword
+  val apiKey : String = DWPluginActivator.getAPIKey
 
   def pushSingleFile(dataset : String, filename : String) : (Int, PushResponse) = {
     val file = new File(filename)

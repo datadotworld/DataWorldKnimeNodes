@@ -10,7 +10,7 @@ class DWPluginActivator extends AbstractUIPlugin {
 
   override def start(context : BundleContext) : Unit = {
     val username : String = DWPluginActivator.getUsername
-    val apiKey : String = DWPluginActivator.getPassword
+    val apiKey : String = DWPluginActivator.getAPIKey
 
     DWPluginActivator.logger info("data.world settings updated for user: " + username)
   }
@@ -32,7 +32,7 @@ object DWPluginActivator {
     return username    
   }
 
-  def getPassword() : String = {
+  def getAPIKey() : String = {
     // TODO: Ensure apiKey is stored encrypted
     val apiKey : String = DWPluginActivator.plugin getPreferenceStore() getString(DWPreferencePage.P_DW_APIKEY)
     return apiKey    

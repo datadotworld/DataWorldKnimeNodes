@@ -113,7 +113,7 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    */
   protected override def configure(inSpecs : Array[DataTableSpec]) : Array[DataTableSpec] = {
     val username : String = DWPluginActivator.getUsername
-    val password : String = DWPluginActivator.getPassword
+    val password : String = DWPluginActivator.getAPIKey
     var account : String = username
     var dataset : String = null
     var filename : String = null
