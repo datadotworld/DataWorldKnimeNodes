@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knimeNode icon="./dw_sparkle8bit16_transparent.png" type="Sink" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>Add Files to Dataset</name>
+    <name>data.world Upload Files</name>
     
     <shortDescription>
         Adds one or more files to a data.world Dataset via the data.world restful API.

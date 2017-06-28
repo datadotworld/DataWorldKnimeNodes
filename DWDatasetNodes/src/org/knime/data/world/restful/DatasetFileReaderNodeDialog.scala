@@ -30,19 +30,12 @@ class DatasetFileReaderNodeDialog extends DefaultNodeSettingsPane {
   addDialogComponent(
     new DialogComponentString(
       new SettingsModelString(
-        DatasetFileReaderNodeModel.CFGKEY_USER,
-        DatasetFileReaderNodeModel.DEFAULT_USER),
-      "data.world Username:",
+        DatasetFileReaderNodeModel.CFGKEY_DATASETFILEURL,
+        DatasetFileReaderNodeModel.DEFAULT_DATASETFILEURL),
+      "Dataset File URL:",
       true,
-      36))
-  addDialogComponent(
-    new DialogComponentString(
-      new SettingsModelString(
-        DatasetFileReaderNodeModel.CFGKEY_DATASETNAME,
-        DatasetFileReaderNodeModel.DEFAULT_DATASETNAME),
-      "Dataset Name:",
-      true,
-      36))
+      72))
+  /* TODO: Populate this with options after restful call to look them up?
   addDialogComponent(
     new DialogComponentStringSelection(
       new SettingsModelString(
@@ -50,6 +43,7 @@ class DatasetFileReaderNodeDialog extends DefaultNodeSettingsPane {
         DatasetFileReaderNodeModel.DEFAULT_DATASETFILENAME),
       "File:",
       Set("UNKNOWN").asJava))
+  */
   /* TODO: Find example where this can be used without a proper inPort?
   addDialogComponent(
     new DialogComponentColumnFilter(

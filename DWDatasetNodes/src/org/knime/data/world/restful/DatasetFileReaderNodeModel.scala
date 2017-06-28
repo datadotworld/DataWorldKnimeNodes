@@ -1,6 +1,7 @@
 package org.knime.data.world.restful
 
 import java.io.File
+import java.net.URI
 
 import org.knime.core.data.DataCell
 import org.knime.core.data.DataColumnSpec
@@ -34,6 +35,8 @@ import org.knime.core.util.KnimeEncryption
 
 import org.knime.data.world.prefs.DWPluginActivator
 
+import scala.annotation.switch
+
 
 /**
  * This is the model implementation of GetDatasetInfo.
@@ -54,6 +57,10 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
     new SettingsModelString(
       DatasetFileReaderNodeModel.CFGKEY_DATASETNAME,
       DatasetFileReaderNodeModel.DEFAULT_DATASETNAME)
+  private val m_datasetFileURL : SettingsModelString =
+    new SettingsModelString(
+      DatasetFileReaderNodeModel.CFGKEY_DATASETFILEURL,
+      DatasetFileReaderNodeModel.DEFAULT_DATASETFILEURL)
 
 
   /**
@@ -107,12 +114,40 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
   protected override def configure(inSpecs : Array[DataTableSpec]) : Array[DataTableSpec] = {
     val username : String = DWPluginActivator.getUsername
     val password : String = DWPluginActivator.getPassword
-    val dataset : String = m_datasetName.getStringValue
-    val filename : String = "iris"  // TODO: Take from node dialog
+    var account : String = username
+    var dataset : String = null
+    var filename : String = null
+    val uri = new URI(m_datasetFileURL getStringValue)
+    val path : Array[String] = uri.getPath.split("/")
+    val uriQuery : String = uri.getQuery
+    
+    if (((path.length == 5) && ((path(3) != "workspace") || (path(4) != "file")))
+        || (path.length > 5)
+        || (path.length == 4)
+        || (path.length < 2)) {
+      DatasetFileReaderNodeModel.logger debug("Configure sees path.length: " + path.length)
+      throw new InvalidSettingsException("URL path is not recognizable; expected: https://data.world/<account>/<dataset>/workspace/file?filename=<datafilename>")
+    } else if (path.length == 2) {
+      dataset = path(0)
+      filename = path(1)
+    } else if (path.length == 3) {
+      account = path(0)
+      dataset = path(1)
+      filename = path(2)
+    } else {
+      if (uri.getHost != "data.world") throw new InvalidSettingsException("URL does not refer to data.world")
+      if (uri.getScheme != "https") throw new InvalidSettingsException("URL is expected to use https")
+      account = path(1)
+      dataset = path(2)
+      filename = uriQuery.split('=')(1).split('.')(0) // TODO: Make much more robust
+    }
+    DatasetFileReaderNodeModel.logger debug("Configure using account: " + account)
+    DatasetFileReaderNodeModel.logger debug("Configure using dataset: " + dataset)
+    DatasetFileReaderNodeModel.logger debug("Configure using filename: " + filename)
     
     m_settings setDriver("world.data.jdbc.Driver")
-    m_settings setJDBCUrl("jdbc:data:world:sql:" + username + ":" + dataset)
-    m_settings setUserName(username)  // Currently unused/redundant, will keep for now.
+    m_settings setJDBCUrl("jdbc:data:world:sql:" + account + ":" + dataset)
+    m_settings setUserName(username)  // Currently appears unused/redundant, will keep for now.
     m_settings setPassword(KnimeEncryption.encrypt(password.toArray))
     m_settings setTimezone("none")
     m_settings setAllowSpacesInColumnNames(true)
@@ -130,8 +165,9 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    * {@inheritDoc}
    */
   protected override def saveSettingsTo(settings : NodeSettingsWO) : Unit = {
-    m_username saveSettingsTo(settings)
-    m_datasetName saveSettingsTo(settings)
+    //m_username saveSettingsTo(settings)
+    //m_datasetName saveSettingsTo(settings)
+    m_datasetFileURL saveSettingsTo(settings)
     DatasetFileReaderNodeModel.logger debug("saveSettingsTo about to call saveConnection")
     
     // TODO: Possibly replace with something that helps the related entries re: validated settings below
@@ -144,8 +180,9 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    * {@inheritDoc}
    */
   protected override def loadValidatedSettingsFrom(settings : NodeSettingsRO) : Unit = {
-    m_username loadSettingsFrom(settings)
-    m_datasetName loadSettingsFrom(settings)
+    //m_username loadSettingsFrom(settings)
+    //m_datasetName loadSettingsFrom(settings)
+    m_datasetFileURL loadSettingsFrom(settings)
 
     // TODO: Replace with something that works
     //DatasetFileReaderNodeModel.logger debug("loadValidatedSettingsFrom about to call loadValidatedConnection")
@@ -157,8 +194,9 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    * {@inheritDoc}
    */
   protected override def validateSettings(settings : NodeSettingsRO) : Unit = {
-    m_username validateSettings(settings)
-    m_datasetName validateSettings(settings)
+    //m_username validateSettings(settings)
+    //m_datasetName validateSettings(settings)
+    m_datasetFileURL validateSettings(settings)  // TODO: Validate looks like a url
     
     // TODO: Replace with something that works
     //DatasetFileReaderNodeModel.logger debug("validateSettings about to call validateConnection")
@@ -205,5 +243,8 @@ object DatasetFileReaderNodeModel {
   val CFGKEY_DATASETFILENAME : String = "Dataset File"
   val DEFAULT_DATASETFILENAME : String = "filename-01"
   
+  val CFGKEY_DATASETFILEURL : String = "Dataset File URL"
+  val DEFAULT_DATASETFILEURL : String = "https://data.world/test-knime/dummy-data-01/workspace/file?filename=cocktails.csv"
+
   val CFGKEY_SQLSTATEMENT : String = DatabaseConnectionSettings.CFG_STATEMENT
 }

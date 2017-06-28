@@ -25,7 +25,7 @@
     </fullDescription>
     
     <ports>
-        <outPort index="0" name="Out-Port name">Table of data from data.world Dataset File</outPort>
+        <outPort index="0" name="File Contents Port">Table of data from data.world Dataset File</outPort>
     </ports>    
 
 </knimeNode>
