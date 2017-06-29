@@ -9,19 +9,15 @@
       <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.GetDatasetInfoNodeFactory" id="org.knime.data.world.restful.GetDatasetInfoNodeFactory"/>
       <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.AddDatasetFileNodeFactory" id="org.knime.data.world.restful.AddDatasetFileNodeFactory"/>
       <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.DatasetFileReaderNodeFactory" id="org.knime.data.world.restful.DatasetFileReaderNodeFactory"/>
+      <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.UploadTableToDatasetNodeFactory" id="org.knime.data.world.restful.UploadTableToDatasetNodeFactory"/>
    </extension>
    
    <extension point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.knime.workbench.ui.preferences"
-            class="org.knime.data.world.prefs.DWPreferencePage"
-            id="org.knime.data.world.prefs.DWPreferencePage"
-            name="data.world Integration"
-      />
+      <page category="org.knime.workbench.ui.preferences" class="org.knime.data.world.prefs.DWPreferencePage" id="org.knime.data.world.prefs.DWPreferencePage" name="data.world Integration"/>
    </extension>
    
    <extension point="org.knime.core.JDBCDriver">
-      <jdbcDriver jarFile="lib/dw-jdbc-0.4.1-shaded.jar" />
+      <jdbcDriver jarFile="lib/dw-jdbc-0.4.1-shaded.jar"/>
    </extension>
    
 </plugin>

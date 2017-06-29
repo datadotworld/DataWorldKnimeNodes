@@ -29,7 +29,13 @@ class PushUploadFile {
   def pushSingleFile(dataset : String, filename : String) : (Int, PushResponse) = {
     val file = new File(filename)
 
-    val uri = uriPrebuild setPath("/v0/uploads/" + username + "/" + dataset + "/files/" + file.getName) build
+    return pushSingleFile(dataset, filename, file getName)
+  }
+
+  def pushSingleFile(dataset : String, filename : String, pushedFilename : String) : (Int, PushResponse) = {
+    val file = new File(filename)
+
+    val uri = uriPrebuild setPath("/v0/uploads/" + username + "/" + dataset + "/files/" + pushedFilename) build
     
     return putRestFileUpload(uri, file)
   }
