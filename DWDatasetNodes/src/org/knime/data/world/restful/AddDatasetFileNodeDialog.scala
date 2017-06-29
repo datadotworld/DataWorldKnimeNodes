@@ -2,10 +2,8 @@ package org.knime.data.world.restful
 
 import org.knime.core.data.StringValue
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane
-import org.knime.core.node.defaultnodesettings.DialogComponentNumber
 import org.knime.core.node.defaultnodesettings.DialogComponentString
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection
-import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded
 import org.knime.core.node.defaultnodesettings.SettingsModelString
 
 /**

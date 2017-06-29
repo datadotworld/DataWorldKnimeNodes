@@ -1,8 +1,6 @@
 package org.knime.data.world.restful
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane
-import org.knime.core.node.defaultnodesettings.DialogComponentColumnFilter
-import org.knime.core.node.defaultnodesettings.DialogComponentNumber
 import org.knime.core.node.defaultnodesettings.DialogComponentString
 import org.knime.core.node.defaultnodesettings.DialogComponentStringSelection
 import org.knime.core.node.defaultnodesettings.SettingsModelString

@@ -10,7 +10,6 @@ import org.knime.core.data.DataTableSpec
 import org.knime.core.data.DataType
 import org.knime.core.data.RowKey
 import org.knime.core.data.`def`.DefaultRow
-import org.knime.core.data.`def`.DoubleCell
 import org.knime.core.data.`def`.IntCell
 import org.knime.core.data.`def`.StringCell
 import org.knime.core.node.BufferedDataContainer
