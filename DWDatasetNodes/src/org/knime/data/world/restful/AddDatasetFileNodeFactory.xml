@@ -7,11 +7,25 @@
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
-        
-        
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
+        <intro>
+            Provides batch uploading of one or more files to an existing data.world Dataset.
+            Each row in the input table is expected to contain the name of the file to be
+            uploaded to data.world.  Files to be uploaded need not be tabular data files;
+            they can be any kind of file supported by data.world (e.g. png, svg, vega-lite plot).
+        </intro>
+
+        <option name="Dataset Name">
+            Specify the name of the Dataset on data.world in which to add files.
+            The named Dataset must be owned by the same user whose account credentials
+            are used to access data.world services.
+        </option>
+        <option name="Filename">
+            Specify the column in the input data table containing the names of files to be uploaded.
+            The filenames in each row should be the full resolvable path to each file to be uploaded.
+            Once a file has been added to the data.world Dataset, its name may be modified by
+            data.world according to its rules on presentation.
+            Only String columns may be selected.
+        </option>
         <!-- possibly more options that can also be grouped by tabs -->
         <!--
         <tab name="Standard Options">
@@ -25,6 +39,6 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Files to be Uploaded">Filenames to be uploaded to a data.world Dataset</inPort>
+        <inPort index="0" name="Files to be Uploaded">Filenames to be uploaded to a data.world Dataset.</inPort>
     </ports>    
 </knimeNode>

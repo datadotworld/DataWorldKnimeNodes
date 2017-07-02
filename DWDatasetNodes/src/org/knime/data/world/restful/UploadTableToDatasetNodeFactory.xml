@@ -7,16 +7,38 @@
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
-        
-        
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
+        <intro>
+            Creates a file in a data.world Dataset containing a copy of all data received
+            via the input port.  More specifically, this file will contain tabular data and
+            so will be parsed by data.world to make it readily available for
+            subsequent querying on data.world (via SparQL or SQL queries at https://data.world)
+            and remote querying via data.world's JDBC connector or data.world SDKs for
+            Python, R, etc. 
+        </intro>
+
+        <option name="Dataset URL or Name">
+            Specify the name of the Dataset on data.world in which to create a CSV file
+            containing all data (the entire KNIME DataTable) provided via the input port.
+            The Dataset may be specified as a URL (e.g. https://data.world/jonloyens/an-intro-to-dataworld-dataset)
+            or as an "account/dataset" short path (e.g. jonloyens/an-intro-to-dataworld-dataset)
+            or merely as the name of the Dataset (e.g. an-intro-to-dataworld-dataset).
+            The named Dataset must be owned by the same user whose account credentials
+            are used to access data.world services.
+        </option>
+        <option name="Name for Uploaded File">
+            Specify a name for the file that will be created in the data.world Dataset.
+            Be aware that supplying a name that exactly matches an existing file in
+            the targeted Dataset will result in the overwriting of that file.
+            Once a file has been added to the data.world Dataset, its name may be modified by
+            data.world according to its rules on presentation.
+        </option>
         <!-- possibly more options that can also be grouped by tabs -->
         <!--
         <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
+            <option name="Dataset URL or Name">
+            </option>
+            <option name="Name for Uploaded File">
+            </option>
         </tab>
         <tab name="Advanced Options">
             <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
@@ -25,6 +47,6 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Table to upload to data.world">Description of first input port...</inPort>
+        <inPort index="0" name="Table to upload to data.world">Table of data to upload to data.world.</inPort>
     </ports>    
 </knimeNode>
