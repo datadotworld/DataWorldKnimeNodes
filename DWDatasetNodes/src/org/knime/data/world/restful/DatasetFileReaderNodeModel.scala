@@ -242,7 +242,7 @@ object DatasetFileReaderNodeModel {
   val DEFAULT_DATASETFILENAME : String = "filename-01"
   
   val CFGKEY_DATASETFILEURL : String = "Dataset File URL"
-  val DEFAULT_DATASETFILEURL : String = "https://data.world/test-knime/dummy-data-01/workspace/file?filename=cocktails.csv"
+  val DEFAULT_DATASETFILEURL : String = "https://data.world/jonloyens/an-intro-to-dataworld-dataset/workspace/file?filename=DataDotWorldBBallStats.csv"
 
   val CFGKEY_SQLSTATEMENT : String = DatabaseConnectionSettings.CFG_STATEMENT
 }
