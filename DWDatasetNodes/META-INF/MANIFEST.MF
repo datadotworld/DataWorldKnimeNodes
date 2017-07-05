@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: GetDatasetInfo-Node extension for KNIME Workbench
+Bundle-Name: data.world KNIME Nodes extension for KNIME Workbench
 Bundle-SymbolicName: org.knime.data.world.restful; singleton:=true
 Bundle-Version: 1.0.0
-Bundle-ClassPath: getdatasetinfo.jar
-Bundle-Activator: org.knime.data.world.restful.GetDatasetInfoNodePlugin
-Bundle-Vendor: Appliomics, LLC
+Bundle-ClassPath: datadotworldnodes.jar
+Bundle-Activator: org.knime.data.world.restful.AddDatasetFileNodePlugin
+Bundle-Vendor: data.world Inc. and KNIME.COM AG
 Require-Bundle: org.eclipse.core.runtime,
  org.knime.workbench.core,
  org.knime.workbench.repository,

@@ -6,7 +6,6 @@
    </extension>
    
    <extension point="org.knime.workbench.repository.nodes">
-      <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.GetDatasetInfoNodeFactory" id="org.knime.data.world.restful.GetDatasetInfoNodeFactory"/>
       <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.AddDatasetFileNodeFactory" id="org.knime.data.world.restful.AddDatasetFileNodeFactory"/>
       <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.DatasetFileReaderNodeFactory" id="org.knime.data.world.restful.DatasetFileReaderNodeFactory"/>
       <node category-path="/dataWorld" factory-class="org.knime.data.world.restful.UploadTableToDatasetNodeFactory" id="org.knime.data.world.restful.UploadTableToDatasetNodeFactory"/>

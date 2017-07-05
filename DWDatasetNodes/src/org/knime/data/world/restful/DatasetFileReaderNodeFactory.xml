@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knimeNode icon="./dw_sparkle8bit16_transparent.png" type="Source" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>data.world File Reader</name>
+    <name>data.world Table Reader</name>
     
     <shortDescription>
-        Reads a data.world Dataset File (tabular data only).
+        Reads a data.world Dataset file (tabular data only).
     </shortDescription>
     
     <fullDescription>
         <intro>
-            Reads a table of data from a specified data.world Dataset File.
+            Reads a table of data from a specified data.world Dataset file.
             Note that files in a Dataset that do not contain tabular data (and thus are
             not accessible for direct querying on data.world) are not supported by this node.
         </intro>
         
         <option name="Dataset File URL">
-            Specify the URL of the File to be read from a data.world Dataset.
+            Specify the URL of the file to be read from a data.world Dataset.
             For ease of use, simply navigate to the Dataset on https://data.world and then to
-            the specific File within that Dataset; copy-paste the URL from the browser into this field.
+            the specific file within that Dataset; copy-paste the URL from the browser into this field.
             More specifically, the URL can be of the format used at https://data.world for any
-            Dataset File there (e.g. https://data.world/jonloyens/an-intro-to-dataworld-dataset/workspace/file?filename=DataDotWorldBBallStats.csv)
+            Dataset file there (e.g. https://data.world/jonloyens/an-intro-to-dataworld-dataset/workspace/file?filename=DataDotWorldBBallStats.csv)
             but can also be specified via a short path (e.g. jonloyens/an-intro-to-dataworld-dataset/DataDotWorldBBallStats.csv)
             or even as an abbreviated short path (e.g. an-intro-to-dataworld-dataset/DataDotWorldBBallStats.csv) assuming
             the account matches the user credentials used to access data.world services. 
