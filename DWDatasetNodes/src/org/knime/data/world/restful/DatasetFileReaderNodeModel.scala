@@ -41,18 +41,7 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
 
   protected val m_settings = new DatabaseQueryConnectionSettings()
   private var m_outSpec : DataTableSpec = null
-  private val m_username : SettingsModelString =
-    new SettingsModelString(
-      DatasetFileReaderNodeModel.CFGKEY_USER,
-      DatasetFileReaderNodeModel.DEFAULT_USER)
-  private val m_datasetName : SettingsModelString =
-    new SettingsModelString(
-      DatasetFileReaderNodeModel.CFGKEY_DATASETNAME,
-      DatasetFileReaderNodeModel.DEFAULT_DATASETNAME)
-  private val m_datasetFileURL : SettingsModelString =
-    new SettingsModelString(
-      DatasetFileReaderNodeModel.CFGKEY_DATASETFILEURL,
-      DatasetFileReaderNodeModel.DEFAULT_DATASETFILEURL)
+  private val m_config = new DatasetFileReaderConfiguration
 
 
   /**
@@ -106,39 +95,31 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
   protected override def configure(inSpecs : Array[DataTableSpec]) : Array[DataTableSpec] = {
     val username : String = DWPluginActivator.getUsername
     val password : String = DWPluginActivator.getAPIKey
-    var account : String = username
-    var dataset : String = null
-    var filename : String = null
-    val uri = new URI(m_datasetFileURL getStringValue)
-    val path : Array[String] = uri.getPath.split("/")
-    val uriQuery : String = uri.getQuery
+    val(account, dataset) = DatasetFileReaderNodeModel.parseDatasetURL(m_config getDatasetString, username)
+    DatasetFileReaderNodeModel.logger debug("Configure using account: " + account)
+    DatasetFileReaderNodeModel.logger debug("Configure using dataset: " + dataset)
     
-    if (((path.length == 5) && ((path(3) != "workspace") || (path(4) != "file")))
-        || (path.length > 5)
-        || (path.length == 4)
-        || (path.length < 2)) {
-      DatasetFileReaderNodeModel.logger debug("Configure sees path.length: " + path.length)
-      throw new InvalidSettingsException("URL path is not recognizable; expected: https://data.world/<account>/<dataset>/workspace/file?filename=<datafilename>")
-    } else if (path.length == 2) {
-      dataset = path(0)
-      filename = path(1)
-    } else if (path.length == 3) {
-      account = path(0)
-      dataset = path(1)
-      filename = path(2)
-    } else {
-      if (uri.getHost != "data.world") throw new InvalidSettingsException("URL does not refer to data.world")
-      if (uri.getScheme != "https") throw new InvalidSettingsException("URL is expected to use https")
-      account = path(1)
-      dataset = path(2)
-      filename = uriQuery.split('=')(1) // TODO: Verify that filename is key and no other fields
-    }
-    // Currently, data.world appears to transform filenames containing
-    // multiple dots in their names to use underscores (for example,
-    // "some.stuff.in.here.csv" is exposed via JDBC as a table instead
-    // named "some_stuff_in_here".  We will attempt to follow this
-    // potentially undocumented pattern which could of course change.
-    if (filename.split('.').length > 1) filename = filename.split('.').dropRight(1).mkString("_")
+    m_settings setDriver("world.data.jdbc.Driver")
+    m_settings setJDBCUrl("jdbc:data:world:sql:" + account + ":" + dataset)
+    m_settings setUserName(username)  // Currently appears unused/redundant, will keep for now.
+    m_settings setPassword(KnimeEncryption.encrypt(password.toArray))
+    m_settings setTimezone("none")
+    m_settings setAllowSpacesInColumnNames(true)
+
+    val query : String = "SELECT * FROM " + m_config.getTableString
+    m_settings setQuery(query)
+    
+    DatasetFileReaderNodeModel.logger debug("Configure about to determine output data table spec from reader")
+    m_outSpec = getReader().getDataTableSpec(getCredentialsProvider)
+
+    return Array[DataTableSpec](m_outSpec)
+  }
+
+  @deprecated
+  protected def configureFileURL(inSpecs : Array[DataTableSpec]) : Array[DataTableSpec] = {
+    val username : String = DWPluginActivator.getUsername
+    val password : String = DWPluginActivator.getAPIKey
+    val(account, dataset, filename) = DatasetFileReaderNodeModel.parseDatasetFileURL(m_config getDatasetString, username)
     DatasetFileReaderNodeModel.logger debug("Configure using account: " + account)
     DatasetFileReaderNodeModel.logger debug("Configure using dataset: " + dataset)
     DatasetFileReaderNodeModel.logger debug("Configure using filename: " + filename)
@@ -163,9 +144,8 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    * {@inheritDoc}
    */
   protected override def saveSettingsTo(settings : NodeSettingsWO) : Unit = {
-    //m_username saveSettingsTo(settings)
-    //m_datasetName saveSettingsTo(settings)
-    m_datasetFileURL saveSettingsTo(settings)
+    m_config saveConfiguration(settings)
+    //m_datasetFileURL saveSettingsTo(settings)
     DatasetFileReaderNodeModel.logger debug("saveSettingsTo about to call saveConnection")
     
     // TODO: Possibly replace with something that helps the related entries re: validated settings below
@@ -178,9 +158,8 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    * {@inheritDoc}
    */
   protected override def loadValidatedSettingsFrom(settings : NodeSettingsRO) : Unit = {
-    //m_username loadSettingsFrom(settings)
-    //m_datasetName loadSettingsFrom(settings)
-    m_datasetFileURL loadSettingsFrom(settings)
+    m_config loadSettingsInModel(settings)
+    //m_datasetFileURL loadSettingsFrom(settings)
 
     // TODO: Replace with something that works
     //DatasetFileReaderNodeModel.logger debug("loadValidatedSettingsFrom about to call loadValidatedConnection")
@@ -192,9 +171,8 @@ class DatasetFileReaderNodeModel extends NodeModel(0, 1) {
    * {@inheritDoc}
    */
   protected override def validateSettings(settings : NodeSettingsRO) : Unit = {
-    //m_username validateSettings(settings)
-    //m_datasetName validateSettings(settings)
-    m_datasetFileURL validateSettings(settings)  // TODO: Validate looks like a url
+    //m_config validateSettings(settings)  // TODO: Validate dataset looks like url
+    //m_datasetFileURL validateSettings(settings)  // TODO: Validate looks like a url
     
     // TODO: Replace with something that works
     //DatasetFileReaderNodeModel.logger debug("validateSettings about to call validateConnection")
@@ -232,17 +210,84 @@ object DatasetFileReaderNodeModel {
   // the logger instance
   private val logger : NodeLogger = NodeLogger.getLogger(classOf[DatasetFileReaderNodeModel])
 
-  val CFGKEY_USER : String = "data.world Username"
-  val DEFAULT_USER : String = "knime"
-  
   val CFGKEY_DATASETNAME : String = "Dataset Name"
-  val DEFAULT_DATASETNAME : String = "dataset-01"
+  val DEFAULT_DATASETNAME : String = "https://data.world/your_account/dataset_name"
 
-  val CFGKEY_DATASETFILENAME : String = "Dataset File"
-  val DEFAULT_DATASETFILENAME : String = "filename-01"
-  
+  val CFGKEY_TABLENAME : String = "Selected Table"
+  val DEFAULT_TABLENAME : String = ""
+
   val CFGKEY_DATASETFILEURL : String = "Dataset File URL"
   val DEFAULT_DATASETFILEURL : String = "https://data.world/jonloyens/an-intro-to-dataworld-dataset/workspace/file?filename=DataDotWorldBBallStats.csv"
 
   val CFGKEY_SQLSTATEMENT : String = DatabaseConnectionSettings.CFG_STATEMENT
+  
+  def parseDatasetURL(datasetURL : String, defaultUsername : String) : (String, String) = {
+    // TODO: Refactor UploadTableToDatasetNodeModel to use this utility
+    // TODO: Move this utility into a more common location
+    var account : String = defaultUsername
+    var dataset : String = null
+    var filename : String = null
+    val uri = new URI(datasetURL)
+    val path : Array[String] = uri.getPath.split("/")
+    val uriQuery : String = uri.getQuery
+    
+    if (path.length > 3) {
+      throw new InvalidSettingsException("URL path is not recognizable; expected: https://data.world/<account>/<dataset>")
+    } else if (path.length == 2) {
+      account = path(0)
+      dataset = path(1)
+      if (account == "") {
+        throw new InvalidSettingsException("URL path is not recognizable; expected: https://data.world/<account>/<dataset>")
+      }
+    } else {
+      if (uri.getHost == null) {
+        dataset = path(0)
+      } else {
+        if (uri.getHost != "data.world") throw new InvalidSettingsException("URL does not refer to data.world")
+        if (uri.getScheme != "https") throw new InvalidSettingsException("URL is expected to use https")
+        account = path(1)
+        dataset = path(2)
+      }
+    }    
+    return (account, dataset)
+  }
+
+  @deprecated
+  def parseDatasetFileURL(datasetURL : String, defaultUsername : String) : (String, String, String) = {
+    var account : String = defaultUsername
+    var dataset : String = null
+    var filename : String = null
+    val uri = new URI(datasetURL)
+    val path : Array[String] = uri.getPath.split("/")
+    val uriQuery : String = uri.getQuery
+    
+    if (((path.length == 5) && ((path(3) != "workspace") || (path(4) != "file")))
+        || (path.length > 5)
+        || (path.length == 4)
+        || (path.length < 2)) {
+      DatasetFileReaderNodeModel.logger debug("Configure sees path.length: " + path.length)
+      throw new InvalidSettingsException("URL path is not recognizable; expected: https://data.world/<account>/<dataset>/workspace/file?filename=<datafilename>")
+    } else if (path.length == 2) {
+      dataset = path(0)
+      filename = path(1)
+    } else if (path.length == 3) {
+      account = path(0)
+      dataset = path(1)
+      filename = path(2)
+    } else {
+      if (uri.getHost != "data.world") throw new InvalidSettingsException("URL does not refer to data.world")
+      if (uri.getScheme != "https") throw new InvalidSettingsException("URL is expected to use https")
+      account = path(1)
+      dataset = path(2)
+      filename = uriQuery.split('=')(1) // TODO: Verify that filename is key and no other fields
+    }
+    // Currently, data.world appears to transform filenames containing
+    // multiple dots in their names to use underscores (for example,
+    // "some.stuff.in.here.csv" is exposed via JDBC as a table instead
+    // named "some_stuff_in_here".  We will attempt to follow this
+    // potentially undocumented pattern which could of course change.
+    if (filename.split('.').length > 1) filename = filename.split('.').dropRight(1).mkString("_")
+    
+    return (account, dataset, filename)
+  }
 }

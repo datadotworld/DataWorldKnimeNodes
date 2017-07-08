@@ -6,6 +6,8 @@ import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
 
+import org.knime.data.world.prefs.DWPluginActivator
+
 import com.google.gson.Gson
 
 import java.net.URI
@@ -40,8 +42,8 @@ case class DatasetInfo(owner : String,
 class GetDatasetInfo {
   val uriPrebuild = new URIBuilder() setScheme("https") setHost("api.data.world")
 
-  // TODO: Pull from preferences
-  val apiKey : String = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcm9kLXVzZXItY2xpZW50OnRlc3Qta25pbWUiLCJpc3MiOiJhZ2VudDp0ZXN0LWtuaW1lOjpjMTJmNGQ3Mi05NWVkLTQ4YzYtOWY4ZS1lOGZjNzBlNzM0NGMiLCJpYXQiOjE0OTU5ODU4OTYsInJvbGUiOlsidXNlcl9hcGlfd3JpdGUiLCJ1c2VyX2FwaV9yZWFkIl0sImdlbmVyYWwtcHVycG9zZSI6dHJ1ZX0.hj99p_bq3YjFcI-wqluqLFK0p1Mq1U2uaC_mJzU3ExEELYhxpPRz9881EXV-BvprepMjwgQQuRezi3CoQL17ZA"
+  val username : String = DWPluginActivator.getUsername
+  val apiKey : String = DWPluginActivator.getAPIKey
 
   def request(username : String, dataset : String) : DatasetInfo = {
     val uri = uriPrebuild setPath("/v0/datasets/" + username + "/" + dataset) build
