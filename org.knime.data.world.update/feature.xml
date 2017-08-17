@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <includes
+         id="org.knime.data.world.feature"
+         version="0.0.0"/>
+
    <plugin
          id="org.scala-lang.scala-library"
          download-size="0"

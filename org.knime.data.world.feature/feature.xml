@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.knime.features.data.world"
+      id="org.knime.data.world.feature"
       label="data.world KNIME Nodes extension for KNIME Workbench"
       version="1.0.0.qualifier"
       provider-name="data.world Inc. and KNIME AG"
