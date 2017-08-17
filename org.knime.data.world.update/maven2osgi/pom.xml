@@ -20,7 +20,7 @@
                         <configuration>
                             <artifacts>
                                 <artifact> 
-                                    <id>org.scala-lang:scala-library:2.12.2</id>
+                                    <id>org.scala-lang:scala-library:2.11.8</id>
                                     <source>true</source>
                                 </artifact>
                             </artifacts>
